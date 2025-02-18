@@ -124,6 +124,11 @@ export const useFavoriteStore = defineStore("favoriteStore", {
       if (process.client) {
         this.favorites = JSON.parse(localStorage.getItem("favorites")) || [];
       }
+      // if(import.meta.client) {
+      //   console.log("this.favorites", this.favorites);
+      //   console.log("localStorage.getItem('favorites')", localStorage.getItem('favorites'));
+
+      // }
     },
   },
 });
