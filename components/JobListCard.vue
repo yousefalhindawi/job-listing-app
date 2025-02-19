@@ -18,7 +18,7 @@ defineProps({
         <p>Company: {{ job.company.name }}</p>
         <p>Category: {{job.categories.map(l => l.name).join(', ')}}</p>
         <p>Location: {{job.locations.map(l => l.name).join(', ')}}</p>
-        <p>Tags: {{job.tags.map(l => l).join(', ')}}</p>
+        <p>Tags: {{job.tags.map(l => l.name).join(', ')}}</p>
         <NuxtLink :to="job?.refs?.landing_page" :external="true" target="_blank" class="text-blue-500">Apply
         </NuxtLink>
         <div>
