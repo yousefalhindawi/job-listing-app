@@ -4,7 +4,7 @@ import { useJobStore, useFavoriteStore } from "../jobStore";
 
 vi.stubGlobal("useRuntimeConfig", () => ({
   public: {
-    apiBase: "https://api.example.com", 
+    apiBase: "https://api.example.com",
     themuseApiKey: "mock-api-key",
   },
 }));
@@ -30,17 +30,20 @@ describe("JobStore", () => {
   it("fetches jobs and updates state", async () => {
     const jobStore = useJobStore();
 
-    vi.stubGlobal("useFetch", vi.fn(() => {
-      return Promise.resolve({
-        data: {
-          value: {
-            results: [{ id: 1, name: "Frontend Developer" }],
-            total: 1,
-            page_count: 1,
+    vi.stubGlobal(
+      "useFetch",
+      vi.fn(() => {
+        return Promise.resolve({
+          data: {
+            value: {
+              results: [{ id: 1, name: "Frontend Developer" }],
+              total: 1,
+              page_count: 1,
+            },
           },
-        },
-      });
-    }));
+        });
+      })
+    );
 
     await jobStore.fetchJobs();
     expect(jobStore.jobs.length).toBe(1);
@@ -51,13 +54,16 @@ describe("JobStore", () => {
   it("fetches a single job and updates state", async () => {
     const jobStore = useJobStore();
 
-    vi.stubGlobal("useFetch", vi.fn(() => {
-      return Promise.resolve({
-        data: {
-          value: { id: 1, name: "Frontend Developer" },
-        },
-      });
-    }));
+    vi.stubGlobal(
+      "useFetch",
+      vi.fn(() => {
+        return Promise.resolve({
+          data: {
+            value: { id: 1, name: "Frontend Developer" },
+          },
+        });
+      })
+    );
 
     await jobStore.fetchJob(1);
     expect(jobStore.job.id).toBe(1);
@@ -72,7 +78,7 @@ describe("JobStore", () => {
     ];
     jobStore.filters.company = "Google";
 
-    const filteredJobs = jobStore.jobs.filter(j =>
+    const filteredJobs = jobStore.jobs.filter((j) =>
       j.company.toLowerCase().includes(jobStore.filters.company.toLowerCase())
     );
 
