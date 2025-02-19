@@ -2,6 +2,8 @@
 
 A **Nuxt 3**-powered job listing application that fetches job listings from **The Muse API**. It allows users to browse jobs, filter by categories, locations, and companies.  
 
+## [Job Finderz](https://job-finderz.netlify.app/)
+
 ## Features  
 
 - **Fetch job listings** from The Muse API  
@@ -42,7 +44,7 @@ npm install
 Create a `.env` file in the root and add:  
 
 ```ini
-NUXT_PUBLIC_API_BASE=https://www.themuse.com/api/public
+NUXT_PUBLIC_API_BASE=https://www.themuse.com/api/public/jobs
 NUXT_PUBLIC_THEMUSE_API_KEY=your-api-key
 ```  
 
@@ -62,7 +64,7 @@ npm run build
 
 ### **Search & Filter Rules**  
 - The **Muse API search is case-sensitive** (Enter whole word).  
-- Filters are **only applied to**:
+- Filters that are **only supported by the Themuse API**:
   - **Company**  
   - **Location**  
   - **Category**  
@@ -94,7 +96,7 @@ npx vitest
 ## Deployment  
 
 ### Deployed to Netlify  
-[Job Finderz](https://job-finderz.netlify.app/) to learn more.
+[Job Finderz](https://job-finderz.netlify.app/)
 ---
 
 # Nuxt Minimal Starter
