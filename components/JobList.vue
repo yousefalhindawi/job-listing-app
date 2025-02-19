@@ -35,7 +35,7 @@ const goToPage = (currentPage) => {
           placeholder="Title ex: Senior Software Engineering Manager, Google"
           class="p-2 border rounded pr-9 w-full"
         />
-        <Tooltip infoText="Enter whole word (Case-sensitive)" />
+        <!-- <Tooltip infoText="Enter whole word (Case-sensitive)" /> -->
         <!-- because how the MUSE API works-->
       </div>
       <div class="relative">

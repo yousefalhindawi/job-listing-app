@@ -4,7 +4,7 @@ import { useJobStore, useFavoriteStore } from "../jobStore";
 
 vi.stubGlobal("useRuntimeConfig", () => ({
   public: {
-    apiBase: "https://api.example.com",
+    apiBase: "https://api.test.com",
     themuseApiKey: "mock-api-key",
   },
 }));
