@@ -19,7 +19,7 @@ const goToPage = (currentPage) => {
     // console.log("goToPage", currentPage)
     if (currentPage < 1 || currentPage > totalPageCount.value) return
     page.value = currentPage
-    console.log(`Fetching jobs for page ${currentPage}`)
+    // console.log(`Fetching jobs for page ${currentPage}`)
     jobStore.fetchJobs();
 }
 </script>
