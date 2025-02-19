@@ -17,15 +17,20 @@ await jobStore.fetchJob(route.params.id);
       <Title>Job Finder | {{ job?.name }}</Title>
       <Meta name="description" :content="job?.contents" />
     </Head>
-    <h1 class="text-2xl font-bold">{{ job?.name }}</h1>
-    <p class="text-gray-700">{{ job?.company?.name }} - {{job?.locations?.map(l => l.name).join(', ')}}</p>
-    <client-only>
-      <p v-html="job?.contents" class="mt-4"></p>
-    </client-only>
-    <p class="mt-2">Type: {{ job?.type }}</p>
-    <p class="mt-2">Level: {{job?.levels?.map(l => l.name).join(', ')}}</p>
+    <div v-if="jobStore?.error" class="mt-4 text-red-600 text-sm">
+      <p>{{ jobStore?.error }}</p>
+    </div>
+    <div v-if="!jobStore?.error">
+      <h1 class="text-2xl font-bold">{{ job?.name }}</h1>
+      <p class="text-gray-700">{{ job?.company?.name }} - {{job?.locations?.map(l => l.name).join(', ')}}</p>
+      <client-only>
+        <p v-html="job?.contents" class="mt-4"></p>
+      </client-only>
+      <p class="mt-2">Type: {{ job?.type }}</p>
+      <p class="mt-2">Level: {{job?.levels?.map(l => l.name).join(', ')}}</p>
 
-    <NuxtLink :to="job?.refs?.landing_page" :external="true" target="_blank"><button
-        class="mt-4 bg-blue-500 text-white px-4 py-2 rounded">Apply Now</button></NuxtLink>
+      <NuxtLink :to="job?.refs?.landing_page" :external="true" target="_blank"><button
+          class="mt-4 bg-blue-500 text-white px-4 py-2 rounded">Apply Now</button></NuxtLink>
+    </div>
   </div>
 </template>
