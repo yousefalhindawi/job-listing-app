@@ -5,11 +5,13 @@ import JobListCard from "./JobListCard.vue";
 import Tooltip from "./Tooltip.vue";
 import Pagination from "./Pagination.vue";
 const jobStore = useJobStore();
-jobStore.fetchJobs();
+if (import.meta.server) {
+  await jobStore.fetchJobs();
+}
 
-const debounceSearch = debounce(() => {
+const debounceSearch = debounce(async () => {
   jobStore.page = 1;
-  jobStore.fetchJobs();
+  await jobStore.fetchJobs();
 }, 1000);
 
 const filteredJobs = computed(() => {

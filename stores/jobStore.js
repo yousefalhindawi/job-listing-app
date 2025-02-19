@@ -12,6 +12,7 @@ export const useJobStore = defineStore("jobStore", {
     job: {},
     error: null,
     loading: false,
+    isFirstFetch: true,
   }),
   actions: {
     async fetchJobs() {
@@ -23,40 +24,52 @@ export const useJobStore = defineStore("jobStore", {
         Object.entries(this.filters).filter(([_, value]) => value)
       );
 
+      const params = new URLSearchParams({
+        page: this.page,
+        ...activeFilters,
+        api_key: config.public.themuseApiKey,
+      }).toString();
+      // console.log("this.isFirstFetch", this.isFirstFetch);
       try {
-        const params = new URLSearchParams({
-          page: this.page,
-          ...activeFilters,
-          api_key: config.public.themuseApiKey,
-        }).toString();
-
-        // const { data: jobs } = await useFetch(`${config.public.apiBase}?${params}`, {
-        const jobs = await $fetch(`${config.public.apiBase}?${params}`, {
-          onResponseError: (error) => {
-            if (
-              error &&
-              error?.response?._data?.error &&
-              error?.response?._data?.code
-            ) {
-              this.error = `${error?.response?._data?.error} (Code: ${error?.response?._data?.code})`;
-            } else {
-              this.error = "An unexpected error occurred while fetching jobs.";
-            }
-            this.loading = false;
-          },
-        });
-        // console.log(jobs);
+        const jobs = await this.fetchData(`${config.public.apiBase}?${params}`);
         this.totalJobs = jobs.total || 0;
         this.totalPageCount = jobs.page_count || 0;
         this.jobs = jobs.results || [];
-        // this.totalJobs = jobs.value.total || 0;
-        // this.totalPageCount = jobs.value.page_count || 0;
-        // this.jobs = jobs.value.results || [];
       } catch (err) {
-        console.log(err);
+        // console.error(err);
       } finally {
         this.loading = false;
       }
+    },
+    async fetchData(url) {
+      // const config = useRuntimeConfig();
+      let response;
+
+      if (this.isFirstFetch) {
+        const { data, error } = await useFetch(url, {
+          onResponseError: this.handleError,
+        });
+        response = data.value;
+        this.isFirstFetch = false;
+      } else {
+        response = await $fetch(url, {
+          onResponseError: this.handleError,
+        });
+      }
+
+      return response;
+    },
+    handleError(error) {
+      if (
+        error &&
+        error?.response?._data?.error &&
+        error?.response?._data?.code
+      ) {
+        this.error = `${error?.response?._data?.error} (Code: ${error?.response?._data?.code})`;
+      } else {
+        this.error = "An unexpected error occurred while fetching jobs.";
+      }
+      this.loading = false;
     },
     async fetchJob(jobId) {
       this.loading = true;
@@ -115,20 +128,18 @@ export const useFavoriteStore = defineStore("favoriteStore", {
         this.favorites.push(job);
       }
 
-      if (process.client) {
+      if (import.meta.client) {
         localStorage.setItem("favorites", JSON.stringify(this.favorites));
       }
     },
 
     loadFavorites() {
-      if (process.client) {
+      // if (process.client) {
+      //   this.favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+      // }
+      if (import.meta.client) {
         this.favorites = JSON.parse(localStorage.getItem("favorites")) || [];
       }
-      // if(import.meta.client) {
-      //   console.log("this.favorites", this.favorites);
-      //   console.log("localStorage.getItem('favorites')", localStorage.getItem('favorites'));
-
-      // }
     },
   },
 });
