@@ -26,7 +26,7 @@ defineProps({
                 'text-red-500': favoriteStore.favorites.some(j => j.id === job.id),
                 'opacity-50': !favoriteStore.favorites.some(j => j.id === job.id)
             }">
-                💖
+                ❤️
             </button>
 
         </div>
