@@ -8,6 +8,7 @@ const jobStore = useJobStore();
 // if (import.meta.server) {
 //   await jobStore.fetchJobs();
 // }
+// this is for when user open the page directly (first load)
 await useAsyncData("jobs", async () => {
   await jobStore.fetchJobs();
   return jobStore.jobs;

@@ -55,6 +55,9 @@ export const useJobStore = defineStore("jobStore", {
       const response = await $fetch(url, {
         onResponseError: this.handleError,
       });
+      /* I used $fetch instead of useFetch here because I used the same function after Component is already mounted in the pagination & filtering,
+        and the useFetch() is designed for server-side data fetching it's not meant to be used for dynamic client-side updates like filtering and pagination.
+        https://nuxt.com/docs/getting-started/data-fetching */
       // }
 
       return response;
