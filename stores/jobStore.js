@@ -12,7 +12,7 @@ export const useJobStore = defineStore("jobStore", {
     job: {},
     error: null,
     loading: false,
-    isFirstFetch: true,
+    // isFirstFetch: true,
   }),
   actions: {
     async fetchJobs() {
@@ -36,26 +36,26 @@ export const useJobStore = defineStore("jobStore", {
         this.totalPageCount = jobs.page_count || 0;
         this.jobs = jobs.results || [];
       } catch (err) {
-        // console.error(err);
+        console.error(err);
       } finally {
         this.loading = false;
       }
     },
     async fetchData(url) {
       // const config = useRuntimeConfig();
-      let response;
+      // let response;
 
-      if (this.isFirstFetch) {
-        const { data, error } = await useFetch(url, {
-          onResponseError: this.handleError,
-        });
-        response = data.value;
-        this.isFirstFetch = false;
-      } else {
-        response = await $fetch(url, {
-          onResponseError: this.handleError,
-        });
-      }
+      // if (this.isFirstFetch) {
+      // const { data, error } = await useFetch(url, {
+      //   onResponseError: this.handleError,
+      // });
+      // response = data.value;
+      // this.isFirstFetch = false;
+      // } else {
+      const response = await $fetch(url, {
+        onResponseError: this.handleError,
+      });
+      // }
 
       return response;
     },
@@ -82,19 +82,7 @@ export const useJobStore = defineStore("jobStore", {
             `${config.public.apiBase}/${jobId}?api_key=${config.public.themuseApiKey}`,
           {
             watch: [() => jobId],
-            onResponseError: (error) => {
-              if (
-                error &&
-                error?.response?._data?.error &&
-                error?.response?._data?.code
-              ) {
-                this.error = `${error?.response?._data?.error} (Code: ${error?.response?._data?.code})`;
-              } else {
-                this.error =
-                  "An unexpected error occurred while fetching jobs.";
-              }
-              this.loading = false;
-            },
+            onResponseError: this.handleError,
           }
         );
 

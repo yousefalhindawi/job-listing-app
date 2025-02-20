@@ -5,9 +5,13 @@ import JobListCard from "./JobListCard.vue";
 import Tooltip from "./Tooltip.vue";
 import Pagination from "./Pagination.vue";
 const jobStore = useJobStore();
-if (import.meta.server) {
+// if (import.meta.server) {
+//   await jobStore.fetchJobs();
+// }
+await useAsyncData("jobs", async () => {
   await jobStore.fetchJobs();
-}
+  return jobStore.jobs;
+});
 
 const debounceSearch = debounce(async () => {
   jobStore.page = 1;
@@ -30,41 +34,26 @@ const goToPage = (currentPage) => {
   <div>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       <div class="relative">
-        <input
-          v-model="jobStore.filters.name"
-          placeholder="Title ex: Senior Software Engineering Manager, Google"
-          class="p-2 border rounded pr-9 w-full"
-        />
+        <input v-model="jobStore.filters.name" placeholder="Title ex: Senior Software Engineering Manager, Google"
+          class="p-2 border rounded pr-9 w-full" />
         <!-- <Tooltip infoText="Enter whole word (Case-sensitive)" /> -->
         <!-- because how the MUSE API works-->
       </div>
       <div class="relative">
-        <input
-          v-model="jobStore.filters.company"
-          placeholder="Company ex: Meta"
-          class="p-2 border rounded pr-9 w-full"
-          @input="debounceSearch"
-        />
+        <input v-model="jobStore.filters.company" placeholder="Company ex: Meta" class="p-2 border rounded pr-9 w-full"
+          @input="debounceSearch" />
         <Tooltip infoText="Enter whole word (Case-sensitive)" />
         <!-- because how the MUSE API works-->
       </div>
       <div class="relative">
-        <input
-          v-model="jobStore.filters.category"
-          placeholder="category ex: Software Engineering"
-          class="p-2 border rounded pr-9 w-full"
-          @input="debounceSearch"
-        />
+        <input v-model="jobStore.filters.category" placeholder="category ex: Software Engineering"
+          class="p-2 border rounded pr-9 w-full" @input="debounceSearch" />
         <Tooltip infoText="Enter whole word (Case-sensitive)" />
         <!-- because how the MUSE API works-->
       </div>
       <div class="relative">
-        <input
-          v-model="jobStore.filters.location"
-          placeholder="Location ex: Remote"
-          class="p-2 border rounded pr-9 w-full"
-          @input="debounceSearch"
-        />
+        <input v-model="jobStore.filters.location" placeholder="Location ex: Remote"
+          class="p-2 border rounded pr-9 w-full" @input="debounceSearch" />
         <Tooltip infoText="Enter whole word (Case-sensitive)" />
         <!-- because how the MUSE API works-->
       </div>
@@ -72,35 +61,22 @@ const goToPage = (currentPage) => {
     <div v-if="jobStore?.loading" class="mt-4 text-gray-500 text-sm">
       <p>Loading...</p>
     </div>
-    <div
-      v-if="jobStore?.jobs?.length > 0"
-      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-5"
-    >
+    <div v-if="jobStore?.jobs?.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-5">
       <JobListCard v-for="job in filteredJobs" :key="job?.id" :job="job" />
     </div>
     <div class="flex justify-between mt-4">
-      <button
-        @click="goToPage(jobStore.page - 1)"
-        class="bg-blue-500 text-white px-4 py-2 rounded"
-        :disabled="jobStore.page === 1"
-        :class="{ 'opacity-50': jobStore.page === 1 }"
-      >
+      <button @click="goToPage(jobStore.page - 1)" class="bg-blue-500 text-white px-4 py-2 rounded"
+        :disabled="jobStore.page === 1" :class="{ 'opacity-50': jobStore.page === 1 }">
         Previous
       </button>
       <span>Page {{ +jobStore.page }}</span>
-      <button
-        @click="goToPage(jobStore.page + 1)"
-        class="bg-blue-500 text-white px-4 py-2 rounded"
-        :class="{
-          'opacity-50':
-            jobStore.page * jobStore.pageSize >= jobStore.totalJobs ||
-            jobStore.totalJobs === 0,
-        }"
-        :disabled="
+      <button @click="goToPage(jobStore.page + 1)" class="bg-blue-500 text-white px-4 py-2 rounded" :class="{
+        'opacity-50':
           jobStore.page * jobStore.pageSize >= jobStore.totalJobs ||
+          jobStore.totalJobs === 0,
+      }" :disabled="jobStore.page * jobStore.pageSize >= jobStore.totalJobs ||
           jobStore.totalJobs === 0
-        "
-      >
+          ">
         Next
       </button>
     </div>
