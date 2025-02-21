@@ -30,20 +30,25 @@ describe("JobStore", () => {
   it("fetches jobs and updates state", async () => {
     const jobStore = useJobStore();
 
-    vi.stubGlobal(
-      "useFetch",
-      vi.fn(() => {
-        return Promise.resolve({
-          data: {
-            value: {
-              results: [{ id: 1, name: "Frontend Developer" }],
-              total: 1,
-              page_count: 1,
-            },
-          },
-        });
-      })
-    );
+    // vi.stubGlobal(
+    //   "$fetch",
+    //   vi.fn(() => {
+    //     return Promise.resolve({
+    //       data: {
+    //         value: {
+    //           results: [{ id: 1, name: "Frontend Developer" }],
+    //           total: 1,
+    //           page_count: 1,
+    //         },
+    //       },
+    //     });
+    //   })
+    // );
+    global.$fetch = vi.fn(async () => ({
+      results: [{ id: 1, name: "Frontend Developer" }],
+      total: 1,
+      page_count: 1,
+    }));
 
     await jobStore.fetchJobs();
     expect(jobStore.jobs.length).toBe(1);

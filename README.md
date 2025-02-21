@@ -88,6 +88,11 @@ Look at the [Themuse API](https://www.themuse.com/developers/api/v2) to learn mo
 
 ### Run Unit Tests with Vitest  
 ```sh
+npm run test
+```
+OR
+ 
+```sh
 npx vitest
 ``` 
 
