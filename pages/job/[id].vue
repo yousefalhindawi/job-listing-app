@@ -20,6 +20,9 @@ await jobStore.fetchJob(route.params.id);
     <div v-if="jobStore?.error" class="mt-4 text-red-600 text-sm">
       <p>{{ jobStore?.error }}</p>
     </div>
+    <div v-if="jobStore?.loading" class="mt-4 text-gray-500 text-sm">
+      <p>Loading...</p>
+    </div>
     <div v-if="!jobStore?.error">
       <h1 class="text-2xl font-bold">{{ job?.name }}</h1>
       <p class="text-gray-700">{{ job?.company?.name }} - {{job?.locations?.map(l => l.name).join(', ')}}</p>
