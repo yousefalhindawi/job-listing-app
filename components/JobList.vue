@@ -63,7 +63,10 @@ const goToPage = (currentPage) => {
       <p>Loading...</p>
     </div>
     <div v-if="jobStore?.jobs?.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-5">
-      <JobListCard v-for="job in filteredJobs" :key="job?.id" :job="job" />
+      <TransitionGroup name="job-list">
+        <JobListCard v-for="job in filteredJobs" :key="job?.id" :job="job" />
+      </TransitionGroup>
+      <!-- <JobListCard v-for="job in filteredJobs" :key="job?.id" :job="job" /> -->
     </div>
     <div class="flex justify-between mt-4">
       <button @click="goToPage(jobStore.page - 1)" class="bg-blue-500 text-white px-4 py-2 rounded"
@@ -76,8 +79,8 @@ const goToPage = (currentPage) => {
           jobStore.page * jobStore.pageSize >= jobStore.totalJobs ||
           jobStore.totalJobs === 0,
       }" :disabled="jobStore.page * jobStore.pageSize >= jobStore.totalJobs ||
-          jobStore.totalJobs === 0
-          ">
+        jobStore.totalJobs === 0
+        ">
         Next
       </button>
     </div>
@@ -88,3 +91,25 @@ const goToPage = (currentPage) => {
     </div>
   </div>
 </template>
+
+<style scoped>
+.job-list-enter-active,
+.job-list-leave-active {
+  /* transition: opacity 0.5s; */
+  transition: all 1s ease;
+}
+
+.job-list-leave-active {
+  position: absolute;
+}
+
+.job-list-enter-from,
+.job-list-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
+.job-list-move {
+  transition: transform 1s;
+}
+</style>

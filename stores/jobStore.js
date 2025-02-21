@@ -7,7 +7,6 @@ export const useJobStore = defineStore("jobStore", {
     pageSize: 20,
     totalJobs: 0,
     totalPageCount: 0,
-    cachedJobs: {},
     filters: { name: "", location: "", category: "", company: "" },
     job: {},
     error: null,
