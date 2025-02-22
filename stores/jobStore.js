@@ -13,8 +13,8 @@ export const useJobStore = defineStore("jobStore", {
     loading: false,
     // isFirstFetch: true,
     cache: new Map(),
-    cacheTTL: 60 * 1000, // 1 min
-    maxCacheSize: 50, // Maximum number of cached requests
+    cacheTTL: 5 * 60 * 1000, // 5 min
+    maxCacheSize: 50, // maximum number of cached requests
   }),
   actions: {
     async fetchJobs() {
@@ -112,7 +112,6 @@ export const useJobStore = defineStore("jobStore", {
     getCachedDataHandler(key) {
       const nuxtApp = useNuxtApp();
 
-      // Clean expired cache before returning data
       this.cleanCache();
 
       const cached = this.cache.get(key);
@@ -123,7 +122,7 @@ export const useJobStore = defineStore("jobStore", {
         return cached.data;
       }
 
-      // Check Nuxt's payload (SSR hydration)
+      
       // return nuxtApp.payload.data[key] || nuxtApp.static.data[key] || undefined;
       const nuxtAppPayloadData =
         nuxtApp.payload.data[key] || nuxtApp.static.data[key];
@@ -140,13 +139,10 @@ export const useJobStore = defineStore("jobStore", {
     },
 
     setCache(key, data) {
-      // remove oldest entry if cache size exceeds max limit
       if (this.cache.size >= this.maxCacheSize) {
-        const oldestKey = this.cache.keys().next().value; // first inserted key
+        const oldestKey = this.cache.keys().next().value;
         this.cache.delete(oldestKey);
       }
-
-      // Store new entry
       this.cache.set(key, { data, timestamp: Date.now() });
     },
 
