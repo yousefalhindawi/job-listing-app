@@ -10,7 +10,7 @@ export default defineNuxtConfig({
     },
   },
   app: {
-    pageTransition: { name: "fade", mode: "out-in" },
+    pageTransition: { name: "page", mode: "out-in" },
     head: {
       title: "Jobs Finder",
       meta: [{ name: "description", content: "Jobs Finder" }],
