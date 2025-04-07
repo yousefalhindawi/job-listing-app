@@ -5,5 +5,6 @@ import JobList from "~/components/JobList.vue";
 <template>
     <div>
         <JobList />
+        <!-- Add your additional content here -->
     </div>
 </template>
